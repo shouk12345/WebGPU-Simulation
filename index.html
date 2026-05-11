@@ -223,7 +223,7 @@
         document.getElementById('canvas').style.display = 'none';
         document.getElementById('unsupported').style.display = 'flex';
       } else {
-        const {run2DFluidDemo} = await import('./demo/2dFluid/2DFluidDemo');
+        const {run2DFluidDemo} = await import('./demo/2DFluid/2DFluidDemo');
         const canvas = document.getElementById('canvas');
         await run2DFluidDemo(canvas, 256, 256);
 
