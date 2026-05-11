@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.local
+
+# TypeScript ビルドキャッシュ
+*.tsbuildinfo
+
+# OS 関連
+.DS_Store
+Thumbs.db
+
+# ログ
+*.log
