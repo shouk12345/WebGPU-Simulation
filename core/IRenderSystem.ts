@@ -1,6 +1,6 @@
 import type { ISystem } from "./ISystem";
 
-export interface IRenderSystem extends ISystem{
+export interface IRenderSystem{
 
     // render pass 専用リソースを初期化
     init(device : GPUDevice, context : GPUCanvasContext) : Promise<void>;

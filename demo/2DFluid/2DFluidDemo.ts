@@ -1,7 +1,7 @@
 import {Simulator} from "../../core/Simulator";
 import {GridFluidActor} from "./GridFluidActor";
 import {InputActor} from "./InputActor";
-import {InputSystem} from "./InputSystem";
+import {InputSystem} from "../../core/InputSystem";
 import {GridFluidSystem} from "./GridFluidSystem";
 import {FluidRenderer} from "./FluidRenderer";
 

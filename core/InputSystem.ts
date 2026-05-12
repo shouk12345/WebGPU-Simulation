@@ -1,5 +1,5 @@
-import type {ISystem} from "../../core/ISystem";
-import { ISimulatorContext } from "../../core/ISimulatorContext";
+import type {ISystem} from "./ISystem";
+import { ISimulatorContext } from "./ISimulatorContext";
 import { InputComponent } from "./InputComponent";
 
 // InputComponentをクエリーし、イベントをバインド/アンバインドするシステム

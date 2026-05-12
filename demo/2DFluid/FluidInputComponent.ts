@@ -1,6 +1,6 @@
 import { GridParamComponent } from "./GridParamComponent";
 import type { ISimulatorContext } from "../../core/ISimulatorContext";
-import { InputComponent, type InputEventBinding } from "./InputComponent";
+import { InputComponent, type InputEventBinding } from "../../core/InputComponent";
 
 // splat イベントデータ
 export interface SplatInfo{
@@ -74,58 +74,58 @@ export class FluidInputComponent extends InputComponent{
         const params = this._ctx.getComponents(GridParamComponent)[0];
         if(!this._element || !params || this.queue.length >= params.MAX_SPLAT) return;
 
-    const rect  = this._element.getBoundingClientRect();
-    const scale = params.velocityScale / rect.width;
-    const posX  = (cx - rect.left) / rect.width;
-    const posY  = (cy - rect.top)  / rect.height;
+        const rect  = this._element.getBoundingClientRect();
+        const scale = params.velocityScale / rect.width;
+        const posX  = (cx - rect.left) / rect.width;
+        const posY  = (cy - rect.top)  / rect.height;
 
-    this.hue = (this.hue + 0.001) % 1.0;
-    const color = hsvToRgba(this.hue, 1.0, 1.0);
+        this.hue = (this.hue + 0.001) % 1.0;
+        const color = hsvToRgba(this.hue, 1.0, 1.0);
 
-    if (isDown) {
-        // 터치 다운: 단일 소용돌이
-        if (this.queue.length >= params.MAX_SPLAT) return;
+        if (isDown) {
+            // タッチダウン-単一渦巻
+            if (this.queue.length >= params.MAX_SPLAT) return;
+            this.queue.push({
+                pos: [posX, posY],
+                delta: [0, 0],
+                color,
+                radius: params.splatRadius,
+                vortex: params.vortexOnDown,
+            });
+            return;
+        }
+
+        // ドラッグ-垂直方向左右一対
+        if (this.queue.length + 2 > params.MAX_SPLAT) return;
+
+        const speed = Math.sqrt(dx * dx + dy * dy) + 1e-6;
+        const intensity = Math.min(speed / params.velocityScale, 1.0);
+        const nx = dx / speed;
+        const ny = dy / speed;
+        const px = -ny; // 垂直方向
+        const py =  nx;
+
+        const offset = params.splatRadius * 0.8;
+        const delta: [number, number] = [dx * scale, dy * scale];
+
+        const [r,g,b] = color;
+        // 左-反時計回り
         this.queue.push({
-            pos: [posX, posY],
-            delta: [0, 0],
-            color,
+            pos  : [posX + px * offset, posY + py * offset],
+            delta, 
+            color : [r * intensity, g * intensity, b * intensity, 1.0],
             radius: params.splatRadius,
-            vortex: params.vortexOnDown,
+            vortex: +params.vortexOnMove,
         });
-        return;
-    }
 
-    // 드래그: 수직 방향 좌우 한 쌍
-    if (this.queue.length + 2 > params.MAX_SPLAT) return;
-
-    const speed = Math.sqrt(dx * dx + dy * dy) + 1e-6;
-    const intensity = Math.min(speed / params.velocityScale, 1.0);
-    const nx = dx / speed; // 이동 방향 단위벡터
-    const ny = dy / speed;
-    const px = -ny; // 수직 방향 (왼쪽)
-    const py =  nx;
-
-    const offset = params.splatRadius * 0.8;
-    const delta: [number, number] = [dx * scale, dy * scale];
-
-    const [r,g,b] = color;
-    // 왼쪽 — 반시계
-    this.queue.push({
-        pos  : [posX + px * offset, posY + py * offset],
-        delta, 
-        color : [r * intensity, g * intensity, b * intensity, 1.0],
-        radius: params.splatRadius,
-        vortex: +params.vortexOnMove,
-    });
-
-    // 오른쪽 — 시계 (부호 반전)
-    this.queue.push({
-        pos  : [posX - px * offset, posY - py * offset],
-        delta, 
-        color : [r * intensity, g * intensity, b * intensity, 1.0],
-        radius: params.splatRadius,
-        vortex: -params.vortexOnMove,
-    });
+        // 右-時計回り(符号反転)
+        this.queue.push({
+            pos  : [posX - px * offset, posY - py * offset],
+            delta, 
+            color : [r * intensity, g * intensity, b * intensity, 1.0],
+            radius: params.splatRadius,
+            vortex: -params.vortexOnMove,
+        });
     }
 }
 

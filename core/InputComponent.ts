@@ -1,4 +1,4 @@
-import { Component } from "../../core/Component";
+import { Component } from "./Component";
 
 // InputSystemがバインドするイベント
 export interface InputEventBinding {

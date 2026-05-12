@@ -91,8 +91,6 @@ export class FluidRenderSystem implements IRenderSystem{
         pass.draw(3); // フルスクリーン三角形を描画
         pass.end();
     }
-
-    Update(dt: number): void { }
     
     Destroy(): void {
         this._renderParamsBuf.destroy();

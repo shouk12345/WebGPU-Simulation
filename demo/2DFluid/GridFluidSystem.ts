@@ -22,7 +22,7 @@ export class GridFluidSystem implements IComputeSystem{
     private computeBindGroup! : GPUBindGroup;
 
     private module! : GPUShaderModule;
-    private splatPipelines! : GPUComputePipeline[];
+    private splatPipelines! : GPUComputePipeline[][];
     private advectVelPipelines! : GPUComputePipeline[];
     private advectDyePipelines! : GPUComputePipeline[];
     private divPipelines! : GPUComputePipeline[];
@@ -125,8 +125,10 @@ export class GridFluidSystem implements IComputeSystem{
         // パイプラインセット
         // PING-PONg用に2セットずつ用意
         this.splatPipelines = [
-            mk('cs_splat', {VEL_PING:0, DYE_PING : 0, PRES_PING: 0}),
-            mk('cs_splat', {VEL_PING:1, DYE_PING : 1, PRES_PING: 0})
+            [mk('cs_splat', {VEL_PING:0, DYE_PING : 0, PRES_PING: 0}),
+            mk('cs_splat', {VEL_PING:0, DYE_PING : 1, PRES_PING: 0}),],
+            [mk('cs_splat', {VEL_PING:1, DYE_PING : 0, PRES_PING: 0}),
+            mk('cs_splat', {VEL_PING:1, DYE_PING : 1, PRES_PING: 0}),],
         ];
         this.advectVelPipelines = [
             mk('cs_advect_vel', {VEL_PING:0, DYE_PING : 0, PRES_PING: 0}),
@@ -211,7 +213,7 @@ export class GridFluidSystem implements IComputeSystem{
             pass.dispatchWorkgroups(this.wgX, this.wgY);
         };
 
-        if(splatCount > 0) dispatch(this.splatPipelines[f.vel_ping]);
+        if(splatCount > 0) dispatch(this.splatPipelines[f.vel_ping][f.dye_ping]);
         dispatch(this.advectVelPipelines[f.vel_ping]); f.vel_ping ^= 1;
         dispatch(this.advectDyePipelines[f.dye_ping]); f.dye_ping ^= 1;
         dispatch(this.curlPipelines[f.vel_ping]);

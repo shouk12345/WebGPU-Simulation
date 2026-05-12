@@ -64,7 +64,7 @@ fn sampleDye(uv : vec2<f32>) -> vec4<f32> {
 fn fs_main(in : VertexOutput) -> @location(0) vec4<f32> {
     let color = sampleDye(in.uv).rgb;
     // Reinhard tone mappingより1.0を超える値を圧縮
-    // bloom — 1.0 초과분만 뽑아서 주변에 퍼뜨림
+    // bloom — 1.0 超過分を周辺に配分
     let sx = 1.0 / f32(rp.width);
     let sy = 1.0 / f32(rp.height);
     var bloom = vec3<f32>(0.0);
@@ -81,7 +81,7 @@ fn fs_main(in : VertexOutput) -> @location(0) vec4<f32> {
     }
     bloom /= weight_sum;
 
-    // Reinhard + bloom 합성
+    // Reinhard + bloom
     let base = color / (color + vec3<f32>(1.0));
     return vec4<f32>(base + bloom * 0.8, 1.0);
 }
