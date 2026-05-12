@@ -1,7 +1,7 @@
-# WebGPU Simulation
+# WebGPU Simulation  
 
-WebGPUを利用したリアルタイム2D Fluid Simulation プロジェクトです。  
-GPU Compute Pipelineを利用し、ブラウザ上で流体シミュレーションをリアルタイムに実行します。
+>WebGPUを利用したリアルタイム2D Fluid Simulation プロジェクトです。  
+>GPU Compute Pipelineを利用し、ブラウザ上で流体シミュレーションをリアルタイムに実行します。
 ---
 
 # Demo
